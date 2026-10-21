@@ -1,4 +1,3 @@
-
 function handlePreFlightRequest(): Response {
   return new Response("Preflight OK!", {
     status: 200,
@@ -11,23 +10,14 @@ function handlePreFlightRequest(): Response {
 
 async function handler(_req: Request): Promise<Response> {
   if (_req.method == "OPTIONS") {
-    return handlePreFlightRequest();
+    handlePreFlightRequest();
   }
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
 
-  if (_req.method != "POST") {
-    return new Response("Use POST with {\"value\": \"mot\"}", {
-      status: 405,
-      headers: { "Access-Control-Allow-Origin": "*" },
-    });
-  }
-
-  const { value } = await _req.json();
-
   const similarityRequestBody = JSON.stringify({
-    word1: value,
+    word1: "centrale",
     word2: "supelec",
   });
 
@@ -56,9 +46,7 @@ async function handler(_req: Request): Promise<Response> {
     const result = await response.json();
 
     console.log(result);
-    // l'API renvoie {result: 0..1}, le front attend {value: 0..100}
-    const body = { value: Math.max(0, Math.round(result.result * 100)) };
-    return new Response(JSON.stringify(body), {
+    return new Response(JSON.stringify(result), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
