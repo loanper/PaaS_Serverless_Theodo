@@ -1,8 +1,4 @@
-async function handler(_req: Request): Promise<Response> {
-  return new Response("Hello World");
-}
 
-Deno.serve(handler);
 function handlePreFlightRequest(): Response {
   return new Response("Preflight OK!", {
     status: 200,
