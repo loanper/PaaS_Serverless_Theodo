@@ -10,14 +10,22 @@ function handlePreFlightRequest(): Response {
 
 async function handler(_req: Request): Promise<Response> {
   if (_req.method == "OPTIONS") {
-    handlePreFlightRequest();
+    return handlePreFlightRequest();
+  }
+
+  const word = new URL(_req.url).searchParams.get("word");
+  if (!word) {
+    return new Response('Missing "word" query parameter, e.g. ?word=chat', {
+      status: 400,
+      headers: { "Access-Control-Allow-Origin": "*" },
+    });
   }
 
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
 
   const similarityRequestBody = JSON.stringify({
-    word1: "centrale",
+    word1: word,
     word2: "supelec",
   });
 
@@ -34,7 +42,7 @@ async function handler(_req: Request): Promise<Response> {
     if (!response.ok) {
       console.error(`Error: ${response.statusText}`);
       return new Response(`Error: ${response.statusText}`, {
-        status: 200,
+        status: 404,
         headers: {
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "*",
@@ -46,7 +54,9 @@ async function handler(_req: Request): Promise<Response> {
     const result = await response.json();
 
     console.log(result);
-    return new Response(JSON.stringify(result), {
+    // l'API renvoie {result: 0..1}, le front attend {value: 0..100}
+    const body = { value: Math.max(0, Math.round(result.result * 100)) };
+    return new Response(JSON.stringify(body), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
