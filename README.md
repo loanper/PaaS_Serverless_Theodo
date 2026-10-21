@@ -13,9 +13,9 @@ Angular front-end  ──GET /?word=chat──▶  Deno serverless function  ─
 
 | Part | Location | Role |
 |------|----------|------|
-| Front-end | `dojo-cs-cemantix/dojo-cs-cemantics/` | Angular + PrimeNG UI: input field, send button, progress bar and a hint message |
+| Front-end | `dojo-cs-cemantics/` | Angular + PrimeNG UI: input field, send button, progress bar and a hint message |
 | Serverless function | `index.ts` | Deno function deployed on Deno Deploy. Reads the word from the URL, compares it to the secret word and returns a score |
-| Similarity API | `dojo-cs-cemantix/word2vec/` | Python service that computes word similarity with a French word2vec model (`POST /similarity`) |
+| Similarity API | `word2vec/` | Python service that computes word similarity with a French word2vec model (`POST /similarity`) |
 
 ### How it works
 
@@ -42,7 +42,7 @@ The function is deployed on Deno Deploy; the front-end calls its public URL (see
 ### Front-end (Angular)
 
 ```bash
-cd dojo-cs-cemantix/dojo-cs-cemantics
+cd dojo-cs-cemantics
 npm install
 ng serve
 # open http://localhost:4200
@@ -52,7 +52,7 @@ To use a locally running function, change `functionUrl` in `src/app/service/api-
 
 ### word2vec API (optional)
 
-A hosted instance is already used by the function. To run it yourself, see `dojo-cs-cemantix/word2vec/README.md`.
+A hosted instance is already used by the function. To run it yourself, see `word2vec/README.md`.
 
 ## Tech stack
 
