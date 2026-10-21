@@ -1,0 +1,21 @@
+<div class="container">
+  <div class="form">
+    <label>Guess my word :</label>
+    <input pInputText type="text" [(ngModel)]="myGuess"/>
+  </div>
+  <p-button (click)="sendMyGuess()">Send</p-button>
+  <p-progressBar [value]="myResultDistance" [style]="{ height: '10px' }" />
+  @if (hasError){
+    <label>Mot inconnu... 🫠</label>
+  } @else if (myResultDistance < 20){
+    <label>T'es loin là ! 🥶</label>
+  } @else if (myResultDistance < 50) {
+    <label>Mouais... 🥱</label>
+  } @else if (myResultDistance < 75) {
+    <label>Tu tiens un truc ! 😳</label>
+  } @else if (myResultDistance < 100) {
+    <label>Si proche du but ! 🔥</label>
+  } @else {
+    <label>Félicitations ! 🎉</label>
+  }
+</div>

@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10% 25%;
+
+  .form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  p-button {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15%
+  }
+
+  input, label, p-progressBar {
+    margin-bottom: 5%;
+  }
+
+
+  ::ng-deep {
+    .p-progressbar-label {
+      display:none
+    }
+  }
+}
