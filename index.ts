@@ -17,8 +17,17 @@ async function handler(_req: Request): Promise<Response> {
   const headers = new Headers();
   headers.append("Content-Type", "application/json");
 
+  if (_req.method != "POST") {
+    return new Response("Use POST with {\"value\": \"mot\"}", {
+      status: 405,
+      headers: { "Access-Control-Allow-Origin": "*" },
+    });
+  }
+
+  const { value } = await _req.json();
+
   const similarityRequestBody = JSON.stringify({
-    word1: "centrale",
+    word1: value,
     word2: "supelec",
   });
 
@@ -30,7 +39,7 @@ async function handler(_req: Request): Promise<Response> {
   };
 
   try {
-    const response = await fetch("https://word2vec-ten.vercel.app", requestOptions);
+    const response = await fetch("https://word2vec-ten.vercel.app/similarity", requestOptions);
 
     if (!response.ok) {
       console.error(`Error: ${response.statusText}`);
@@ -47,7 +56,9 @@ async function handler(_req: Request): Promise<Response> {
     const result = await response.json();
 
     console.log(result);
-    return new Response(JSON.stringify(result), {
+    // l'API renvoie {result: 0..1}, le front attend {value: 0..100}
+    const body = { value: Math.max(0, Math.round(result.result * 100)) };
+    return new Response(JSON.stringify(body), {
       status: 200,
       headers: {
         "Content-Type": "application/json",
